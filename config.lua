@@ -51,6 +51,7 @@ Config.Stashes = {
         slots = 25,
         pin = true,
         -- job = 'police'
+        -- citizenid = 'JFD98238'
     }
 }
 

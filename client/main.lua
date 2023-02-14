@@ -40,6 +40,35 @@ end
 
 CreateThread(function()
     for k, v in pairs(Config.Stashes) do
+        local options = {}
+
+        options[#options+1] = {
+            type = 'client',
+            event = 'sd-stashes:client:OpenPolice',
+            icon = Config.PoliceIcon,
+            label = Config.PoliceLabel,
+            stashname = k,
+            stashdata = v,
+            job = Config.PoliceJobs,
+        }
+
+        options[#options+1] = {
+            type = 'client',
+            event = 'sd-stashes:client:Open',
+            icon = v.icon,
+            label = v.label,
+            stashname = k,
+            stashdata = v,
+        }
+
+        if v.job then
+            options[#options].job = v.job
+        end
+
+        if v.citizenid then
+            options[#options].citizenid = v.citizenid
+        end
+
         exports[Config.Target]:AddBoxZone(k, v.coords, v.length, v.width, {
             name = k,
             heading = v.heading,
@@ -47,26 +76,7 @@ CreateThread(function()
             minZ = v.coords.z, 
             maxZ = v.coords.z + v.height,
         }, {
-            options = {
-                {
-                    type = 'client',
-                    event = 'sd-stashes:client:Open',
-                    icon = v.icon,
-                    label = v.label,
-                    stashname = k,
-                    stashdata = v,
-                    job = (v.job ~= nil and v.job or "all"),
-                },
-                {
-                    type = 'client',
-                    event = 'sd-stashes:client:OpenPolice',
-                    icon = Config.PoliceIcon,
-                    label = Config.PoliceLabel,
-                    stashname = k,
-                    stashdata = v,
-                    job = Config.PoliceJobs,
-                }
-            },
+            options = options,
             distance = 2.5,
         })
     end
