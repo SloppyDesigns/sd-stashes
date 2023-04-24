@@ -1,7 +1,7 @@
 Config = {}
 Config.Debug = false
-Config.SDMenuVersion = 'qb' -- nh-context version v1 / v2 / zf / qb
-Config.SDInputVersion = 'qb' -- nh-keyboad version v1 / v2 / zf / qb
+Config.SDMenuVersion = 'qb' -- nh-context version v1 / v2 / zf / qb / ox
+Config.SDInputVersion = 'qb' -- nh-keyboad version v1 / v2 / zf / qb / ox
 Config.Target = 'qb-target' -- qb-target / qtarget
 
 -- Police Open Stash
@@ -26,7 +26,15 @@ Config.InventoryOpen = function(id, data)
         TriggerEvent("inventory:client:SetCurrentStash", id)
     elseif Config.Framework == "ESX" then
         -- ox_inventory
-        exports.ox_inventory:openInventory('stash', { id = id })
+        if GetResourceState('ox_inventory'):find('start') then
+            exports.ox_inventory:openInventory('stash', { id = id })
+        end
+
+        -- qs-inventory
+        if GetResourceState('qs-inventory'):find('start') then
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", id)
+            TriggerEvent("inventory:client:SetCurrentStash", id)
+        end
     end
 end
 
