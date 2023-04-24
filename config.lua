@@ -32,7 +32,10 @@ Config.InventoryOpen = function(id, data)
 
         -- qs-inventory
         if GetResourceState('qs-inventory'):find('start') then
-            TriggerServerEvent("inventory:server:OpenInventory", "stash", id)
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", id, {
+                maxweight = data.weight,
+                slots = data.slots,
+            })
             TriggerEvent("inventory:client:SetCurrentStash", id)
         end
     end
